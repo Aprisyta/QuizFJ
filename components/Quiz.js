@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Slider, ProgressBarAndroid } from 'react-native';
+import CustomSlider from './CustomSlider'
+import { green, grey } from '../utils/colors'
 
 class Quiz extends React.Component {
 
@@ -10,26 +12,24 @@ class Quiz extends React.Component {
   }
 
   reset = () => {
-    console.log(this.slider.toString());
-    this.slider.setNativeProps({value: 0});
     this.setState((prevState) => ({
       index: prevState.index + 1,
+      value: 0,
+      score: prevState.score + prevState.value
     }))
   }
 
-  increaseScore = (val) => {
-    console.log(this.slider.value + "uo");
-    this.setState({ value: this.slider.value })
+  slide = (value) => {
+    this.setState({ value })
   }
 
   render() {
     const questions = ["abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vwx", "yz"]
     const { index, value, score } = this.state
-    // console.log(r);
     if( index === questions.length ) {
       return(
         <View>
-          <Text>Quiz complete</Text>
+          <Text>Quiz complete. Score: {score}</Text>
         </View>
       )
     }
@@ -40,27 +40,23 @@ class Quiz extends React.Component {
           progress={index/questions.length}
           styleAttr='Horizontal'
           indeterminate={false}
-          color={'#0000ff'}
+          color={'#54ff9f'}
         />
-      <Text>{`${questions[index]}`}</Text>
-        <Slider
-          minimumValue={0}
-          maximumValue={10}
-          step={1}
-          style={styles.slider}
-          onChange={this.increaseScore.bind(this)}
-          ref={r => this.slider = r}
-          minimumTrackTintColor={'#0000ff'}
-          maximumTrackTintColor={'#0000ff'}
-          thumbTintColor={'#D3D3D3'}
+        <Text style={styles.otherText}>
+          {`Question ${questions[index]}`}
+        </Text>
+        <Text style={styles.otherText}>Everyday</Text>
+        <CustomSlider
+          value={value}
+          onChange={(value) => this.slide(value)}
         />
-      <View style={{flexDirection: 'column', justifyContent: 'flex-end'}}>
+        <Text style={styles.otherText}>Not at all</Text>
         <Text
           onPress={() => this.reset()}
-          >
+          style={styles.nextText}
+        >
           Next >
         </Text>
-      </View>
       </View>
     );
   }
@@ -71,6 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
+    margin: 0,
   },
   progressBar: {
     width: 300,
@@ -78,17 +75,14 @@ const styles = StyleSheet.create({
       { scaleY: 5 }
     ]
   },
-  // text: {
-  //   alignSelf
-  // },
-  slider: {
-    borderRadius: 100,
-    width: 250,
-    transform: [
-      { rotateZ : '-90deg' },
-      {  scaleY: 10 },
-    ],
+  nextText: {
+    alignSelf: 'flex-end',
+    color: green
   },
+  otherText: {
+    color: grey,
+    // padding: 20,
+  }
 });
 
 export default Quiz;
