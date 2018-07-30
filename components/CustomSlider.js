@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Slider } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Slider from 'react-native-slider'
 import { green, blue } from '../utils/colors'
 class CustomSlider extends React.Component {
   render () {
@@ -14,22 +15,35 @@ class CustomSlider extends React.Component {
         onValueChange={onChange}
         maximumTrackTintColor={green}
         minimumTrackTintColor={green}
-        thumbTintColor={blue}
+        trackStyle={styles.track}
+        thumbStyle={styles.thumb}
       />
     )
   }
 }
 
 const styles = StyleSheet.create({
+  track: {
+    borderRadius: 500,
+    transform: [
+      { scaleY: 5 },
+    ]
+  },
   slider: {
-    borderRadius: 100,
     width: 250,
     margin: 25,
     transform: [
       { rotateZ : '-90deg' },
-      {  scaleY: 10 },
     ],
   },
+  thumb: {
+    backgroundColor: blue,
+    borderColor: 'white',
+    borderWidth: 4,
+    height: 20,
+    width: 20,
+    borderRadius: 500,
+  }
 })
 
 export default CustomSlider;
